@@ -1,0 +1,15 @@
+# Patient List # >10 Doesn't add properly.
+# Check Memory Cleanup.
+# Check Cache.
+# Check efficiency of http symptom search api.
+# Patient Symptoms Load Function.
+# Symptom_Code = x, Symptom_Name = y.
+# Add Text Label "Select a patient to add a symptom"
+# When Database is deleted, clear selected displayed pt info.
+# Finish heme validators.
+# Look into QTablewidget . closeEditor()
+# table rowcountchanged()
+# table just use a simple loop.
+# QModelindex?
+# Fix edit patient.
+# Use message boxes for warning messages.
