@@ -280,10 +280,8 @@ class MainWindow(qtw.QMainWindow):
     def diagnosis_tab(self):  # Diagnosis Tab
 
         # Creating Widgets.
-        self.list_patients = qtw.QListWidget()
+        self.table_patients = qtw.QTableWidget()
         self.list_symptom_search = qtw.QListWidget()
-        self.groupbox_list_patients = qtw.QGroupBox()
-        self.list_high_probability = qtw.QListWidget()
         self.list_medium_probability = qtw.QListWidget()
         self.list_low_probability = qtw.QListWidget()
         self.list_patient_symptoms = qtw.QListWidget()
@@ -302,8 +300,13 @@ class MainWindow(qtw.QMainWindow):
         self.label_medium_probability = qtw.QLabel()
         self.label_low_probability = qtw.QLabel()
         self.label_patient_symptoms = qtw.QLabel()
+        # Table Configuration.
+        list_patients_table_columns = ['ID', 'First Name', 'Last Name']
+        self.table_patients.setColumnCount(len(list_patients_table_columns))
+        self.table_patients.setHorizontalHeaderLabels(
+            list_patients_table_columns)
+
         # Set Text.
-        self.groupbox_list_patients.setTitle('List of Patients')
         self.pushbutton_add_patient.setText('Add Patient')
         self.pushbutton_edit_patient.setText('Edit Patient')
         self.pushbutton_remove_patient.setText('Remove Patient')
@@ -327,18 +330,7 @@ class MainWindow(qtw.QMainWindow):
 
         self.lineedit_symptom_search.setStyleSheet(
             'border: 2px solid black; border-radius:2px; background-color: #FDF5ED')
-        self.groupbox_list_patients.setStyleSheet(("""
-            QGroupBox{
-                border: 3px solid black;
-                border-radius: 10px;
-                background-color: #FDF5ED;
-                margin-top: 20px;
-                }
-                QGroupBox::title{
-                    subcontrol-origin: margin;
-                    subcontrol-position: top center;
-                    padding: 0 3px;
-                    }"""))
+
         self.list_patient_symptoms.setStyleSheet(
             self.list_symptom_search.styleSheet())
         self.label_high_probability.setStyleSheet('font: 15px; font: bold')
@@ -349,66 +341,19 @@ class MainWindow(qtw.QMainWindow):
         self.label_patient_symptoms.setStyleSheet(
             self.label_high_probability.styleSheet())
         # Set Fixed Size.
-        self.groupbox_list_patients.setFixedSize(
-            200, (self.tab_bar.height()-450))
-        self.list_patients.setFixedSize(
-            self.groupbox_list_patients.width(), self.groupbox_list_patients.height()-20)
+
         self.messagebox_delete_database_confirmation.setFixedSize(200, 200)
-        self.list_high_probability.setFixedSize(200, 325)
-        self.list_medium_probability.setFixedSize(
-            self.list_high_probability.width(), self.list_high_probability.height())
-        self.list_low_probability.setFixedSize(
-            self.list_high_probability.width(), self.list_high_probability.height())
+
         self.lineedit_symptom_search.setFixedSize(200, 25)
         self.list_symptom_search.setFixedSize(475, 275)
-        self.list_patient_symptoms.setFixedSize(
-            self.list_high_probability.width(), self.list_symptom_search.height()+20)
         self.label_high_probability.adjustSize()
         self.label_medium_probability.adjustSize()
         self.label_low_probability.adjustSize()
         self.label_patient_symptoms.adjustSize()
         # Move.
-        self.groupbox_list_patients.move(20, 20)
-        self.pushbutton_remove_patient.move(((self.groupbox_list_patients.frameGeometry(
-        ).right())+20), ((self.groupbox_list_patients.frameGeometry().bottom()))-25)
-        self.pushbutton_add_patient.move(self.pushbutton_remove_patient.x(
-        ), (self.pushbutton_remove_patient.frameGeometry().top()-40))
-        self.pushbutton_edit_patient.move(self.pushbutton_add_patient.x(
-        )+self.button_width+20, (self.pushbutton_add_patient.y()))
-        self.pushbutton_delete_database.move(
-            self.pushbutton_edit_patient.x(), self.pushbutton_remove_patient.y())
-        self.list_patients.move(0, 20)
-        self.list_high_probability.move(500, ((self.groupbox_list_patients.frameGeometry(
-        ).bottom())-self.list_high_probability.height()))
-        self.list_medium_probability.move((self.list_high_probability.x(
-        )+self.list_high_probability.width()+25), self.list_high_probability.y())
-        self.list_low_probability.move((self.list_medium_probability.x(
-        )+self.list_medium_probability.width()+25), self.list_high_probability.y())
-        self.lineedit_symptom_search.move(
-            20, ((self.groupbox_list_patients.frameGeometry().bottom())+25))
-        self.list_symptom_search.move(self.lineedit_symptom_search.x(
-        ), (self.lineedit_symptom_search.y()+self.lineedit_symptom_search.height())+20)
-        self.list_patient_symptoms.move(
-            self.list_high_probability.x(), self.list_symptom_search.y()-20)
-        self.pushbutton_symptom_search.move((self.lineedit_symptom_search.frameGeometry(
-        ).right()+20), self.lineedit_symptom_search.y())
-        self.pushbutton_add_symptom.move((self.list_symptom_search.x(
-        )+5), self.list_symptom_search.frameGeometry().bottom()+10)
-        self.pushbutton_remove_symptom.move((self.list_patient_symptoms.x(
-        )+5), self.list_patient_symptoms.frameGeometry().bottom()+10)
-        self.label_high_probability.move(((self.list_high_probability.frameGeometry().center().x(
-        ))-(int((self.label_high_probability.width())/2))), ((self.list_high_probability.y())-self.label_high_probability.height())-5)
-        self.label_medium_probability.move(((self.list_medium_probability.frameGeometry().center(
-        ).x())-(int((self.label_medium_probability.width())/2))), self.label_high_probability.y())
-        self.label_low_probability.move(((self.list_low_probability.frameGeometry().center(
-        ).x())-(int((self.label_low_probability.width())/2))), self.label_high_probability.y())
-        self.label_patient_symptoms.move(((self.list_patient_symptoms.frameGeometry().center().x(
-        ))-(int((self.label_patient_symptoms.width())/2))), ((self.list_patient_symptoms.y())-self.label_patient_symptoms.height())-5)
+
         # Set Parent.
-        self.list_patients.setParent(self.groupbox_list_patients)
-        self.list_symptom_search.setParent(self.tab_diagnosis)
-        self.groupbox_list_patients.setParent(self.tab_diagnosis)
-        self.list_high_probability.setParent(self.tab_diagnosis)
+        self.table_patients.setParent(self.tab_diagnosis)
         self.list_medium_probability.setParent(self.tab_diagnosis)
         self.list_low_probability.setParent(self.tab_diagnosis)
         self.list_patient_symptoms.setParent(self.tab_diagnosis)
@@ -435,13 +380,10 @@ class MainWindow(qtw.QMainWindow):
         self.pushbutton_add_symptom.clicked.connect(self.add_selected_symptom)
         self.pushbutton_remove_symptom.clicked.connect(
             self.remove_selected_symptom)
-        self.list_patients.itemDoubleClicked.connect(self.load_dblclicked_pt)
         self.messagebox_delete_database_confirmation.buttonClicked.connect(
             self.delete_database)
         # Other.
-        self.list_patients.setAlternatingRowColors(True)
         self.list_symptom_search.setAlternatingRowColors(True)
-        self.list_patients.setSortingEnabled(True)
         self.list_symptom_search.hide()
         self.list_patient_symptoms.hide()
         self.label_patient_symptoms.hide()
@@ -453,45 +395,6 @@ class MainWindow(qtw.QMainWindow):
             'Yes', qtw.QMessageBox.YesRole)
         self.messagebox_delete_database_confirmation.addButton(
             'No', qtw.QMessageBox.NoRole)
-        # Label Loop.
-        self.variable_patient_info_label_loop_y_coordinate = self.groupbox_list_patients.y()+20
-        for pinfo in self.list_patient_info_label_names:
-            # Create Label.
-            diag_label_info = 'self.label_'+pinfo
-            diag_label_info = qtw.QLabel()
-            # Adding Widget to Dictionary.
-            self.dict_diag_widgets[
-                'selected_' + pinfo+'_label'] = diag_label_info
-            # Create Line Edit.
-            diag_lineedit_input_info = 'self.label_input_'+pinfo
-            diag_lineedit_input_info = qtw.QLineEdit()
-            # Adding Widget to Dictionary.
-            self.dict_diag_widgets[
-                'selected_'+pinfo + '_lineedit'] = diag_lineedit_input_info
-            # Set Text.
-            diag_label_info.setText(pinfo+':')
-            # Set Alignment.
-            diag_label_info.setAlignment(qt.AlignCenter)
-            # Set Style Sheet.
-            diag_label_info.setStyleSheet('text-decoration: underline;')
-            diag_lineedit_input_info.setStyleSheet(
-                'background-color: darkgray;')
-            # Adjust Size.
-            diag_label_info.adjustSize()
-            # Move.
-            diag_label_info.move(
-                ((self.groupbox_list_patients.x() +
-                 self.groupbox_list_patients.width()+75)-diag_label_info.width()),
-                self.variable_patient_info_label_loop_y_coordinate)
-            diag_lineedit_input_info.move(
-                (diag_label_info.x()+diag_label_info.width()+5), diag_label_info.y())
-            # Set Parent.
-            diag_label_info.setParent(self.tab_diagnosis)
-            diag_lineedit_input_info.setParent(self.tab_diagnosis)
-            # Set Read Only.
-            diag_lineedit_input_info.setReadOnly(True)
-            # Increment Y Coordinate. (For Next Label)
-            self.variable_patient_info_label_loop_y_coordinate = self.variable_patient_info_label_loop_y_coordinate+25
 
         self.tab_bar.show()
         self.window_add_patient()
@@ -973,7 +876,6 @@ class MainWindow(qtw.QMainWindow):
    #####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      #####
 
     def load_patient_database(self):  # Loading the Patient Database.
-        self.list_patients.clear()  # Clearing the List of Patients.
 
         conn = sql.connect('patients.db')  # Connecting to the Database.
         c = conn.cursor()  # Creating a Cursor.
@@ -994,8 +896,6 @@ class MainWindow(qtw.QMainWindow):
             list_patient_widget = qtw.QLabel()
             # Setting the Label Text for Each Patient.
             list_patient_widget.setText(list_patient)
-            # Adding the Label Widget to the List of Patients.
-            self.list_patients.addItem(list_patient)
         conn.commit()  # Committing the Changes to the Database.
         conn.close()  # Closing the Connection to the Database.
 
