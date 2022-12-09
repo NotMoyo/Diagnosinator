@@ -948,7 +948,7 @@ class MainWindow(qtw.QMainWindow):
             QTableWidget{
                 border: 1px outset black;background-color:#A0A1A7; alternate-background-color:#55828B;gridline-color: black;}""")
         self.table_heme_values.setStyleSheet(
-            'QLineEdit{background-color: #EAE6FA; text-align: right;}')
+            'QLineEdit{background-color: #EAE6FA;}')
         self.timer_statusbar_update()
 
     def timer_statusbar_update(self):  # Status Bar Update Timer.
