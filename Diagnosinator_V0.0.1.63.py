@@ -1588,11 +1588,10 @@ class MainWindow(qtw.QMainWindow):
         self.selected_patient_info = self.selected_patient_info[0]
         self.columns = c.description
         self.columns = [column[0] for column in self.columns]
-        self.dict_selected_patient_info = {**dict(zip(self.columns, self.selected_patient_info))}
+        self.dict_selected_patient_info = {
+            **dict(zip(self.columns, self.selected_patient_info))}
         conn.commit()
         conn.close()
-
-        
 
     def load_pt_symptoms(self):
         self.list_patient_symptoms.clear()
