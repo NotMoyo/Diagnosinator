@@ -350,7 +350,46 @@ class MainWindow(qtw.QMainWindow):
         self.label_medium_probability.adjustSize()
         self.label_low_probability.adjustSize()
         self.label_patient_symptoms.adjustSize()
+        self.table_patients.setFixedSize(475, 275)
+
         # Move.
+        self.table_patients.move(10, 10)
+
+        self.list_symptom_search.move(
+            10, self.table_patients.y() + self.table_patients.height() + 10)
+        self.list_medium_probability.move(self.list_symptom_search.x(
+        ) + self.list_symptom_search.width() + 10, self.list_symptom_search.y())
+        self.list_low_probability.move(self.list_medium_probability.x(
+        ), self.list_medium_probability.y() + self.list_medium_probability.height() + 10)
+        self.list_patient_symptoms.move(self.list_low_probability.x(
+        ), self.list_low_probability.y() + self.list_low_probability.height() + 10)
+
+        self.lineedit_symptom_search.move(self.list_patient_symptoms.x(
+        ), self.list_patient_symptoms.y() + self.list_patient_symptoms.height() + 10)
+
+        self.pushbutton_add_patient.move(self.table_patients.x(
+        ), self.table_patients.y() + self.table_patients.height() + 10)
+        self.pushbutton_edit_patient.move(self.pushbutton_add_patient.x(
+        ), self.pushbutton_add_patient.y() + self.pushbutton_add_patient.height() + 10)
+        self.pushbutton_remove_patient.move(self.pushbutton_edit_patient.x(
+        ), self.pushbutton_edit_patient.y() + self.pushbutton_edit_patient.height() + 10)
+        self.pushbutton_delete_database.move(self.pushbutton_remove_patient.x(
+        ), self.pushbutton_remove_patient.y() + self.pushbutton_remove_patient.height() + 10)
+        self.pushbutton_symptom_search.move(self.lineedit_symptom_search.x(
+        ) + self.lineedit_symptom_search.width() + 10, self.lineedit_symptom_search.y())
+        self.pushbutton_add_symptom.move(self.lineedit_symptom_search.x(
+        ), self.lineedit_symptom_search.y() + self.lineedit_symptom_search.height() + 10)
+        self.pushbutton_remove_symptom.move(self.pushbutton_add_symptom.x(
+        ) + self.pushbutton_add_symptom.width() + 10, self.pushbutton_add_symptom.y())
+
+        self.label_high_probability.move(self.list_symptom_search.x(
+        ), self.list_symptom_search.y() - self.label_high_probability.height() - 10)
+        self.label_medium_probability.move(self.list_medium_probability.x(
+        ), self.list_medium_probability.y() - self.label_medium_probability.height() - 10)
+        self.label_low_probability.move(self.list_low_probability.x(
+        ), self.list_low_probability.y() - self.label_low_probability.height() - 10)
+        self.label_patient_symptoms.move(self.list_patient_symptoms.x(
+        ), self.list_patient_symptoms.y() - self.label_patient_symptoms.height() - 10)
 
         # Set Parent.
         self.table_patients.setParent(self.tab_diagnosis)
