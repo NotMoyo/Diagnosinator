@@ -306,6 +306,19 @@ class MainWindow(qtw.QMainWindow):
             list_patients_table_columns)
         self.table_patients.setAlternatingRowColors(True)
         self.table_patients.setShowGrid(True)
+        self.table_patients.resizeColumnsToContents()
+        self.table_patients.resizeRowsToContents()
+        self.table_patients.horizontalHeader().setSectionResizeMode(
+            qtw.QHeaderView.ResizeToContents)
+        self.table_patients.verticalHeader().setSectionResizeMode(
+            qtw.QHeaderView.ResizeToContents)
+        self.table_patients.setSizeAdjustPolicy(
+            qtw.QAbstractScrollArea.AdjustToContents)
+        self.table_patients.setEditTriggers(
+            qtw.QAbstractItemView.NoEditTriggers)
+        self.table_patients.horizontalHeader().setStretchLastSection(True)
+        self.table_patients.verticalHeader().setMinimumWidth(25)
+        self.table_patients.horizontalHeader().setMinimumHeight(30)
         # Set Text.
         self.pushbutton_add_patient.setText('Add Patient')
         self.pushbutton_edit_patient.setText('Edit Patient')
@@ -885,6 +898,7 @@ class MainWindow(qtw.QMainWindow):
  #########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  #####
    #####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      #####
 
+
     def load_patient_database(self):  # Loading the Patient Database.
 
         conn = sql.connect('patients.db')  # Connecting to the Database.
@@ -905,12 +919,20 @@ class MainWindow(qtw.QMainWindow):
             var_last_name = patient[2]
 
             self.table_patients.insertRow(row)
-            self.table_patients.setItem(row, 0, qtw.QTableWidgetItem(str(var_id)))
-            qtw.QTableWidgetItem(str(var_id)).setFlags(qtc.Qt.ItemIsEnabled) # Disabling Editing of the ID.
-            self.table_patients.setItem(row, 1, qtw.QTableWidgetItem(str(var_first_name)))
-            qtw.QTableWidgetItem(str(var_first_name)).setFlags(qtc.Qt.ItemIsEnabled) # Disabling Editing of the First Name.
-            self.table_patients.setItem(row, 2, qtw.QTableWidgetItem(str(var_last_name)))
-            qtw.QTableWidgetItem(str(var_last_name)).setFlags(qtc.Qt.ItemIsEnabled) # Disabling Editing of the Last Name.
+            self.table_patients.setItem(
+                row, 0, qtw.QTableWidgetItem(str(var_id)))
+            # Disabling Editing of the ID.
+            qtw.QTableWidgetItem(str(var_id)).setFlags(qtc.Qt.ItemIsEnabled)
+            self.table_patients.setItem(
+                row, 1, qtw.QTableWidgetItem(str(var_first_name)))
+            # Disabling Editing of the First Name.
+            qtw.QTableWidgetItem(str(var_first_name)).setFlags(
+                qtc.Qt.ItemIsEnabled)
+            self.table_patients.setItem(
+                row, 2, qtw.QTableWidgetItem(str(var_last_name)))
+            # Disabling Editing of the Last Name.
+            qtw.QTableWidgetItem(str(var_last_name)).setFlags(
+                qtc.Qt.ItemIsEnabled)
         print('database_patients', database_patients)
 
     def update_status_bar(self):  # Updating the Status Bar.
