@@ -317,6 +317,8 @@ class MainWindow(qtw.QMainWindow):
             qtw.QAbstractScrollArea.AdjustToContents)
         self.table_patients.setEditTriggers(
             qtw.QAbstractItemView.NoEditTriggers)
+        self.table_patients.setSelectionBehavior(
+            qtw.QAbstractItemView.SelectRows)
         self.table_patients.horizontalHeader().setStretchLastSection(True)
         self.table_patients.verticalHeader().setMinimumWidth(25)
         self.table_patients.horizontalHeader().setMinimumHeight(30)
@@ -383,6 +385,7 @@ class MainWindow(qtw.QMainWindow):
         # Set Parent.
         self.table_patients.setParent(self.tab_diagnosis)
 
+        self.list_symptom_search.setParent(self.tab_diagnosis)
         self.lineedit_symptom_search.setParent(self.tab_diagnosis)
         self.pushbutton_add_patient.setParent(self.tab_diagnosis)
         self.pushbutton_edit_patient.setParent(self.tab_diagnosis)
@@ -901,8 +904,6 @@ class MainWindow(qtw.QMainWindow):
 
     def load_patient_database(self):  # Loading the Patient Database.
 
-        # self.table_patients.clear()  # Clearing the Table.
-
         conn = sql.connect('patients.db')  # Connecting to the Database.
         c = conn.cursor()  # Creating a Cursor.
 
@@ -921,9 +922,9 @@ class MainWindow(qtw.QMainWindow):
             var_first_name = patient[1]  # Setting the First Name.
             var_last_name = patient[2]  # Setting the Last Name.
 
-            self.table_patients.insertRow(row) # Inserting a Row.
-            self.table_patients.setItem( 
-                row, 0, qtw.QTableWidgetItem(str(var_id))) 
+            self.table_patients.insertRow(row)  # Inserting a Row.
+            self.table_patients.setItem(
+                row, 0, qtw.QTableWidgetItem(str(var_id)))
             # Disabling Editing of the ID.
             qtw.QTableWidgetItem(str(var_id)).setFlags(qtc.Qt.ItemIsEnabled)
             self.table_patients.setItem(
@@ -984,6 +985,12 @@ class MainWindow(qtw.QMainWindow):
 
     def search_symptom(self):
         if self.lineedit_symptom_search.text() == '':
+            messagebox_enter_search_term = qtw.QMessageBox()
+            messagebox_enter_search_term.setIcon(qtw.QMessageBox.Information)
+            messagebox_enter_search_term.setText(
+                'Please enter a search term')
+            messagebox_enter_search_term.setWindowTitle('Search Term Error')
+            messagebox_enter_search_term.exec_()
             print('Enter a Search Term')
         else:
             try:
@@ -1096,10 +1103,17 @@ class MainWindow(qtw.QMainWindow):
                     pass
 
             except:
-                print('uhh try again dude')
-                pass
+                if len(self.list_symptom_search) == 0:
+                    self.list_symptom_search.clear()
+                    self.list_symptom_search.addItem('No Results Found')
+                    self.list_symptom_search.adjustSize()
+                    self.pushbutton_add_symptom.hide()
+                    self.pushbutton_remove_symptom.hide()
+                else:
+                    pass
 
     # Add Selected Symptom to Patient Symptoms List
+
     def add_selected_symptom(self):
         self.list_patient_symptoms.addItem(
             self.list_symptom_search.currentItem().text())  # Add Selected Symptom to Patient Symptoms List
@@ -1455,19 +1469,22 @@ class MainWindow(qtw.QMainWindow):
 
     def remove_patient_info(self):
         print('> REMOVING PATIENT INFO -----')
-        current_row = self.list_patients.currentRow()+1
+        current_row = self.table_patients.currentRow()+1
 
         if current_row == 0:
             print('Select A Patient')
             self.update_id_track()
         else:
-            self.clicked_patient_id = self.list_patients.currentItem().text()[
-                0]
+            self.clicked_patient_id = self.table_patients.item(
+                current_row-1, 0).text()
 
             conn = sql.connect('patients.db')
             c = conn.cursor()
 
             c.execute("DELETE FROM Patient_List WHERE ID = (?)",
+                      (int(self.clicked_patient_id),))
+
+            c.execute("DELETE FROM Hematology_Values WHERE ID = (?)",
                       (int(self.clicked_patient_id),))
 
             conn.commit()
@@ -1480,7 +1497,6 @@ class MainWindow(qtw.QMainWindow):
                 self.update_id_track()
             else:
                 self.update_id_track()
-        print('----- FINISHED <')
 
     def load_dblclicked_pt(self):
         self.clicked_patient_id = self.list_patients.currentItem().text()[0]
@@ -1600,6 +1616,7 @@ class MainWindow(qtw.QMainWindow):
     def delete_database(self, button):
 
         if 'Yes' in button.text():  # Checks if the Yes Button was clicked.
+
             self.messagebox_delete_database_confirmation.show()
             conn = sql.connect('patients.db')
             c = conn.cursor()
@@ -1614,10 +1631,17 @@ class MainWindow(qtw.QMainWindow):
             initialize_database()
 
             print('----- DATABASE CLEARED -----')
+            self.table_patients.clear()
+            self.table_patients.setRowCount(0)
+
             self.load_patient_database()
             self.update_id_track()
         else:
-            print('-----CANCELLED-----')
+            messagebox_decline_database_deletion = qtw.QMessageBox()
+            messagebox_decline_database_deletion.setWindowTitle(
+                'No Database Deleted')
+            messagebox_decline_database_deletion.setText('No Database Deleted')
+            messagebox_decline_database_deletion.exec_()
 
     def exit_application(self):
         # -==BEGINNING---#
