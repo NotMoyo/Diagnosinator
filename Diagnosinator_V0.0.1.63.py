@@ -213,7 +213,8 @@ class MainWindow(qtw.QMainWindow):
         year_limit_tens = (self.datetime_now.strftime('%y')[-2])
 
         self.regexp_input_name = qtc.QRegExp('^[A-Za-z]{1,16}$')
-        self.regexp_input_num = qtc.QRegExp('(^\d{1,5}$)|(^\d{1,5}\.\d\d?$)')  # NOQA
+        self.regexp_input_num = qtc.QRegExp(
+            '(^\d{1,5}$)|(^\d{1,5}\.\d\d?$)')  # 0-99999.99
         self.regexp_input_date = qtc.QRegExp('(([1-9]|0[1-9]|1[0-2])'
                                              '/([1-9]|0[1-9]|[1-2]\d|3[0-1])'
                                              '/((19\d\d|20[0-'+str(int(year_limit_tens)-1)+']\d|20'+str(year_limit_tens)+'[0-'+year_limit_ones+']))|)')
@@ -898,8 +899,9 @@ class MainWindow(qtw.QMainWindow):
  #########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  ########  #####
    #####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      ####      #####
 
-
     def load_patient_database(self):  # Loading the Patient Database.
+
+        # self.table_patients.clear()  # Clearing the Table.
 
         conn = sql.connect('patients.db')  # Connecting to the Database.
         c = conn.cursor()  # Creating a Cursor.
@@ -914,13 +916,14 @@ class MainWindow(qtw.QMainWindow):
         conn.close()  # Closing the Connection to the Database.
 
         for row, patient in enumerate(database_patients):
-            var_id = patient[0]
-            var_first_name = patient[1]
-            var_last_name = patient[2]
+            self.table_patients.setRowCount(row)  # Setting the Row Count.
+            var_id = patient[0]  # Setting the ID.
+            var_first_name = patient[1]  # Setting the First Name.
+            var_last_name = patient[2]  # Setting the Last Name.
 
-            self.table_patients.insertRow(row)
-            self.table_patients.setItem(
-                row, 0, qtw.QTableWidgetItem(str(var_id)))
+            self.table_patients.insertRow(row) # Inserting a Row.
+            self.table_patients.setItem( 
+                row, 0, qtw.QTableWidgetItem(str(var_id))) 
             # Disabling Editing of the ID.
             qtw.QTableWidgetItem(str(var_id)).setFlags(qtc.Qt.ItemIsEnabled)
             self.table_patients.setItem(
